@@ -85,7 +85,7 @@ export function EmergencyOverview({ emergency, icon, position, onClose, onNaviga
         if (isOpen) {
             loadEvents();
         }
-    }, [isOpen, emergency?.id, loadEvents]);
+    }, [isOpen, emergency.id]);
 
     // Create a dummy element to anchor the popover at the icon position
     const anchorStyle: React.CSSProperties = {

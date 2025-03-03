@@ -1,5 +1,4 @@
 'use client'
-import Image from "next/image";
 import { MyMap } from "../components/Map/MyMap";
 
 export default function Home() {
