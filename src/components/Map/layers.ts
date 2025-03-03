@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { IconLayer, TextLayer, ScatterplotLayer } from '@deck.gl/layers';
 import { COLOR_SEVERITY_MAP } from '../../lib/utils';
-import { IconData } from '@/components/EmergencyOverview';
+import { IconData } from '@/components/Emergency/EmergencyOverview';
 import { SafetyAsset } from '@/types/SafetyAsset';
 
 export function getLayers(iconData: IconData[], userLocation: [number, number], victimOnClick: (info: any, event: any) => boolean) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger, PopoverAnchor } from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover';
 import { X, Navigation, Clock, RefreshCw } from 'lucide-react';
 import { timeToTimeAgo, getSeverityColor } from "@/lib/utils";
 import EmergencyInfo from './EmergencyInfo';
@@ -85,7 +85,7 @@ export function EmergencyOverview({ emergency, icon, position, onClose, onNaviga
         if (isOpen) {
             loadEvents();
         }
-    }, [emergency, isOpen]);
+    }, [isOpen, emergency?.id, loadEvents]);
 
     // Create a dummy element to anchor the popover at the icon position
     const anchorStyle: React.CSSProperties = {

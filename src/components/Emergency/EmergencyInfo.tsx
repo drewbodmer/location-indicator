@@ -52,7 +52,7 @@ export default function EmergencyInfo({ timelineEvents, emergency }: { timelineE
                 setLastContacted(new Date(event.timestamp));
             }
         })
-    }, [timelineEvents]);
+    }, [timelineEvents, emergencyServicesContacted]);
 
     const getEventIcon = (type: string) => {
         switch (type) {

@@ -6,7 +6,7 @@ import type { IControl } from 'mapbox-gl';
 import { getUserLocation, getEmergencyLocations, getSafetyAssets } from '@/lib/api/locations';
 import type { LineLayerSpecification } from 'mapbox-gl';
 import { RouteInfo } from '@/components/Map/RouteInfo';
-import { EmergencyOverview, IconData } from '@/components/EmergencyOverview';
+import { EmergencyOverview, IconData } from '@/components/Emergency/EmergencyOverview';
 import { Emergency } from '@/types/Emergency';
 import { SafetyAsset } from "@/types/SafetyAsset";
 import { getLayers, getSafetyAssetLayers } from './layers';
@@ -111,7 +111,7 @@ export function MyMap() {
             } catch (error) {
                 console.error("Failed to load safety assets:", error);
             }
-    }, [selectedVictim, userLocation]);
+    }, [getDirections, userLocation]);
 
     const layers = getLayers(iconData, userLocation, victimOnClick);
     const safetyLayers = showSafetyAssets ? getSafetyAssetLayers(safetyAssets) : [];
