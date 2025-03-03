@@ -3,27 +3,27 @@ import { TimelineEvent } from "@/types/TimelineEvent";
 const fireTimelineEvents: TimelineEvent[] = [
   {
     id: '1-1',
-    title: 'Emergency Services Notified',
-    description: 'Local fire department has been dispatched to the location.',
-    timestamp: new Date(Date.now() - 2 * 60000).toLocaleString(),
+    title: 'Evacuation Started',
+    description: 'Building evacuation protocol initiated.',
+    timestamp: new Date(Date.now() - 4 * 60000).toLocaleString(),
     type: 'action',
-    severity: 'high'
+    severity: 'high',
   },
   {
     id: '1-2',
-    title: 'Fire Detected',
-    description: 'Smoke detectors triggered in Room 101.',
+    title: '911 Called',
+    description: 'Emergency services contacted about fire incident.',
     timestamp: new Date(Date.now() - 5 * 60000).toLocaleString(),
-    type: 'alert',
-    severity: 'high'
+    type: 'action',
+    severity: 'high',
   },
   {
     id: '1-3',
-    title: 'Evacuation Started',
-    description: 'Building evacuation protocol initiated.',
-    timestamp: new Date(Date.now() - 7 * 60000).toLocaleString(),
-    type: 'action',
-    severity: 'high'
+    title: 'Fire Detected',
+    description: 'Smoke detectors triggered',
+    timestamp: new Date(Date.now() - 5 * 60000).toLocaleString(),
+    type: 'alert',
+    severity: 'high',
   },
   {
     id: '1-4',
@@ -31,8 +31,9 @@ const fireTimelineEvents: TimelineEvent[] = [
     description: 'Student reported smoke coming from trash can in Room 101.',
     timestamp: new Date(Date.now() - 15 * 60000).toLocaleString(),
     type: 'notification',
-    severity: 'medium'
-  }
+    severity: 'high',
+    imgUrl: 'https://images.pexels.com/photos/2033933/pexels-photo-2033933.jpeg?cs=srgb&dl=pexels-mohamedelaminemsiouri-2033933.jpg&fm=jpg'
+  },
 ];
 
 const injuryTimelineEvents: TimelineEvent[] = [
@@ -42,10 +43,10 @@ const injuryTimelineEvents: TimelineEvent[] = [
     description: 'School nurse and first aid team dispatched to location.',
     timestamp: new Date(Date.now() - 3 * 60000).toLocaleString(),
     type: 'action',
-    severity: 'medium'
+    severity: 'medium',
   },
-  {
-    id: '2-4',
+    {
+    id: '2-2',
     title: 'Parents Notified',
     description: 'Parents have been contacted and are on their way.',
     timestamp: new Date(Date.now() - 4 * 60000).toLocaleString(),
@@ -61,12 +62,12 @@ const injuryTimelineEvents: TimelineEvent[] = [
     severity: 'medium'
   },
   {
-    id: '2-2',
+    id: '2-4',
     title: 'Injury Reported',
     description: 'Student reported to have fallen and hit their head in the hallway.',
     timestamp: new Date(Date.now() - 8 * 60000).toLocaleString(),
     type: 'alert',
-    severity: 'medium'
+    severity: 'medium',
   },
 ];
 
@@ -75,33 +76,27 @@ const trafficTimelineEvents: TimelineEvent[] = [
     id: '3-1',
     title: 'Traffic Control Established',
     description: 'Security personnel directing traffic around incident.',
-    timestamp: new Date(Date.now() - 5 * 60000).toLocaleString(), // 5 minutes ago
+    timestamp: new Date(Date.now() - 5 * 60000).toLocaleString(),
     type: 'action',
     severity: 'low'
   },
   {
-    id: '3-4',
-    title: 'Alternate Route Advised',
-    description: 'Staff and students advised to use north entrance until cleared.',
-    timestamp: new Date(Date.now() - 8 * 60000).toLocaleString(), // 8 minutes ago
-    type: 'notification',
-    severity: 'low'
-  },
-  {
-    id: '3-3',
+    id: '3-2',
     title: 'No Injuries Reported',
     description: 'All parties involved report no injuries.',
-    timestamp: new Date(Date.now() - 10 * 60000).toLocaleString(), // 10 minutes ago
+    timestamp: new Date(Date.now() - 10 * 60000).toLocaleString(),
     type: 'update',
     severity: 'low'
   },
   {
-    id: '3-2',
+    id: '3-3',
     title: 'Minor Collision Reported',
     description: 'Two vehicles involved in minor collision near school entrance.',
-    timestamp: new Date(Date.now() - 12 * 60000).toLocaleString(), // 12 minutes ago
+    timestamp: new Date(Date.now() - 12 * 60000).toLocaleString(),
     type: 'alert',
-    severity: 'low' }
+    severity: 'low',
+    imgUrl: 'https://monittochiro.com/media/k2/items/cache/eb6c7c01c4e98e1f2578f9959463b973_XL.jpg'
+  },
 ];
 
 const emergencyTimelines: { [key: string]: TimelineEvent[] } = {

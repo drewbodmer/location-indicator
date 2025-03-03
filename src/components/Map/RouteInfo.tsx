@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Clock, MapPin, Navigation, Copy, Check } from 'lucide-react';
+import { Clock, MapPin, Navigation, Copy, Check, X } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface RouteInfoProps {
     duration: number;
     distance: number;
+    onClose: () => void;
     position?: [number, number];
 }
 
-export function RouteInfo({ duration, distance, position }: RouteInfoProps) {
+export function RouteInfo({ duration, distance, position, onClose }: RouteInfoProps) {
     const [copied, setCopied] = useState(false);
     const minutes = Math.round(duration / 60);
     const distanceKm = (distance / 1000).toFixed(2);
@@ -31,8 +32,17 @@ export function RouteInfo({ duration, distance, position }: RouteInfoProps) {
     return (
         <div className="absolute top-4 right-4 z-10">
             <div className="bg-primary/75 rounded-lg border overflow-hidden w-64">
-                <div className="text-primary-foreground p-3">
+                <div className="text-primary-foreground p-3 flex justify-between items-start">
                     <h3 className="text-lg font-medium ">Route to Emergency</h3>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6" 
+                        onClick={onClose}
+                        title="Close"
+                    >
+                        <X className="h-4 w-4" />
+                    </Button>
                 </div>
                 <div className="p-4 space-y-3 text-primary-foreground">
                     <div className="flex items-center text-sm">
@@ -40,10 +50,10 @@ export function RouteInfo({ duration, distance, position }: RouteInfoProps) {
                         <span className="font-medium truncate flex-1">
                             {position ? `${position[0].toFixed(4)}, ${position[1].toFixed(4)}` : 'Unknown location'}
                         </span>
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-6 w-6 ml-1" 
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 ml-1"
                             onClick={copyToClipboard}
                             title="Copy coordinates"
                             disabled={!position}

@@ -5,5 +5,6 @@ export interface TimelineEvent {
   timestamp: string;
   type: 'notification' | 'update' | 'alert' | 'action';
   severity?: 'low' | 'medium' | 'high';
+  imgUrl?: string;
 }
 

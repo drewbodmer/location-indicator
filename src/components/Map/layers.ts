@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { IconLayer, TextLayer, ScatterplotLayer } from '@deck.gl/layers';
 import { COLOR_SEVERITY_MAP } from '../../lib/utils';
-import { IconData } from '@/components/Map/InteractiveIcon';
+import { IconData } from '@/components/EmergencyOverview';
+import { SafetyAsset } from '@/types/SafetyAsset';
 
 export function getLayers(iconData: IconData[], userLocation: [number, number], victimOnClick: (info: any, event: any) => boolean) {
 
@@ -71,7 +72,7 @@ export function getLayers(iconData: IconData[], userLocation: [number, number], 
             getIcon: (d: IconData) => ({url: "/assets/user.png", width: 32, height: 32}),
             getPosition: (d: { position: [number, number] }) => d.position,
             getSize: (d: { size: number }) => {return 35},
-            getColor: [0, 128, 255], // Blue for user
+            getColor: [0, 128, 255],
             pickable: false
         }),
         new IconLayer({
@@ -98,7 +99,7 @@ export function getLayers(iconData: IconData[], userLocation: [number, number], 
             getPosition: (d: IconData) => d.position,
             getSize: (d: IconData) => d.size || 64,
             billboard: false,
-            getColor: [255, 255, 255], // White to show original colors
+            getColor: [255, 255, 255],
             pickable: true,
             onClick(info, event) {
                 return victimOnClick(info, event);
@@ -106,7 +107,46 @@ export function getLayers(iconData: IconData[], userLocation: [number, number], 
         })
     ];
 
-
-
     return layers;
+}
+
+export function getSafetyAssetLayers(safetyAssets: SafetyAsset[]) {
+    if (!safetyAssets || safetyAssets.length === 0) {
+        return [];
+    }
+
+    return [
+        new IconLayer({
+            id: 'safety-asset-icon-layer',
+            data: safetyAssets,
+            getIcon: (d: SafetyAsset) => {
+                switch (d.type) {
+                    case 'fire_extinguisher':
+                        return { url: "/assets/fire-ext.png", width: 32, height: 32 };
+                    case 'first_aid':
+                        return { url: "/assets/first-aid.png", width: 32, height: 32 };
+                    default:
+                        return { url: "/assets/safety.png", width: 32, height: 32 };
+                }
+            },
+            getPosition: (d: SafetyAsset) => d.location,
+            getSize: 48,
+            getColor: [255, 255, 255],
+            pickable: true
+        }),
+
+        new TextLayer({
+            id: 'safety-asset-text-layer',
+            data: safetyAssets,
+            getText: (d: SafetyAsset) => d.title,
+            getPosition: (d: SafetyAsset) => d.location,
+            getSize: 14,
+            getAngle: 0,
+            getTextAnchor: 'middle',
+            getAlignmentBaseline: 'center',
+            getPixelOffset: [0, -40],
+            getColor: [255, 255, 255],
+            pickable: false,
+        }),
+    ];
 }

@@ -4,7 +4,7 @@ import { MyMap } from "../components/Map/MyMap";
 
 export default function Home() {
   return (
-    <div className="mt-5 items-center justify-center flex flex-col">
+    <div className="items-center justify-center flex flex-col">
         <MyMap/>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
       </main>

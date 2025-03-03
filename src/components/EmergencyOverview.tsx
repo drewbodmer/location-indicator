@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger, PopoverAnchor } from '@/components/ui/popover';
-import { X, Navigation} from 'lucide-react';
-import { timeToTimeAgo } from "@/lib/utils";
-import TimelineInfo from '../TimelineInfo';
+import { X, Navigation, Clock, RefreshCw } from 'lucide-react';
+import { timeToTimeAgo, getSeverityColor } from "@/lib/utils";
+import EmergencyInfo from './EmergencyInfo';
 import { Emergency } from "@/types/Emergency";
+import { TimelineEvent } from "@/types/TimelineEvent";
+import { getTimelineEvents } from "@/lib/api/timeline";
 
 export interface IconData {
     id?: string;
@@ -17,9 +19,9 @@ export interface IconData {
         type: string;
         description: string;
         imageUrl?: string;
-        timestamp?: string;
         severity?: 'low' | 'medium' | 'high';
     };
+    emergency?: Emergency;
 }
 
 interface InteractiveIconProps {
@@ -27,14 +29,16 @@ interface InteractiveIconProps {
     icon: IconData;
     position: { x: number; y: number };
     onClose: () => void;
-    onNavigate?: () => void;
+    onNavigate?: (emergency: Emergency) => void;
 }
 
-export function InteractiveIcon({ emergency, icon, position, onClose, onNavigate }: InteractiveIconProps) {
+export function EmergencyOverview({ emergency, icon, position, onClose, onNavigate }: InteractiveIconProps) {
+    const [events, setEvents] = useState<TimelineEvent[]>([]);
     const [isOpen, setIsOpen] = useState(true);
-    const [openInfo, setOpenInfo] = useState(false);
     const [emergencyServicesContacted, setEmergencyServicesContacted] = useState(false);
     const [lastContacted, setLastContacted] = useState<Date | null>(null);
+    const [startTime, setStartTime] = useState<Date | null>(null);
+    const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
     useEffect(() => {
         setIsOpen(true);
@@ -47,24 +51,41 @@ export function InteractiveIcon({ emergency, icon, position, onClose, onNavigate
 
     const handleNavigate = () => {
         if (onNavigate) {
-            setIsOpen(false);
-            onClose();
-            onNavigate();
+            onNavigate(emergency);
+            handleClose();
         }
     };
 
-    const getSeverityColor = (severity?: string) => {
-        switch (severity) {
-            case 'high':
-                return 'bg-red-600';
-            case 'medium':
-                return 'bg-yellow-500';
-            case 'low':
-                return 'bg-green-500';
-            default:
-                return 'bg-blue-500';
+    const loadEvents = async () => {
+        try {
+            const timelineEvents = await getTimelineEvents(emergency.id);
+            setEvents(timelineEvents);
+
+            // Hack to check if emergency services have been contacted
+            const contactEvent = timelineEvents.find(event =>
+                event.title.includes('911 Called')
+            );
+
+            if (contactEvent) {
+                setEmergencyServicesContacted(true);
+                setLastContacted(new Date(contactEvent.timestamp));
+            }
+
+            if (timelineEvents.length > 0) {
+                // assuming received events are ordered by timestamp decreasing
+                setStartTime(new Date(timelineEvents[timelineEvents.length - 1].timestamp));
+                setLastUpdated(new Date(timelineEvents[0].timestamp));
+            }
+        } catch (error) {
+            console.error("Failed to load timeline events:", error);
         }
     };
+
+    useEffect(() => {
+        if (isOpen) {
+            loadEvents();
+        }
+    }, [emergency, isOpen]);
 
     // Create a dummy element to anchor the popover at the icon position
     const anchorStyle: React.CSSProperties = {
@@ -74,11 +95,6 @@ export function InteractiveIcon({ emergency, icon, position, onClose, onNavigate
         width: '1px',
         height: '1px',
         pointerEvents: 'none'
-    };
-
-    const contactEmergencyServices = () => {
-        setEmergencyServicesContacted(true);
-        setLastContacted(new Date());
     };
 
     return (
@@ -116,14 +132,24 @@ export function InteractiveIcon({ emergency, icon, position, onClose, onNavigate
                         </div>
                     )}
 
+
                     <p className="text-gray-700 mb-2">{icon.info?.description || 'No description available'}</p>
                     <p className='text-muted-foreground text-xs'>{emergencyServicesContacted ? `Available information sent to emergency services ${lastContacted ? timeToTimeAgo(lastContacted, false) : ''}` : ''}</p>
 
-                    {icon.info?.timestamp && (
-                        <div className="text-gray-500 text-sm mt-2">
-                            <time>last update: {timeToTimeAgo(new Date(icon.info.timestamp))}</time>
-                        </div>
-                    )}
+                    <div className="text-muted-foreground text-xs mt-2">
+                        {startTime && (
+                            <div className="flex items-center mb-1">
+                                <Clock className="h-4 w-4 mr-1" />
+                                <span>Started: {timeToTimeAgo(startTime)}</span>
+                            </div>
+                        )}
+                        {lastUpdated && (
+                            <div className="flex items-center">
+                                <RefreshCw className="h-4 w-4 mr-1" />
+                                <span>Last update: {timeToTimeAgo(lastUpdated)}</span>
+                            </div>
+                        )}
+                    </div>
 
                     <div className="mt-4 grid grid-cols-2 gap-2">
                         <Button
@@ -133,7 +159,7 @@ export function InteractiveIcon({ emergency, icon, position, onClose, onNavigate
                             <Navigation className="mr-1" />
                             Navigate
                         </Button>
-                        {emergency && <TimelineInfo emergency={emergency}/>}
+                        {emergency && <EmergencyInfo timelineEvents={events} emergency={emergency} />}
                     </div>
                 </div>
             </PopoverContent>
