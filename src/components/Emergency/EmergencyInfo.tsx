@@ -125,7 +125,7 @@ export default function EmergencyInfo({ timelineEvents, emergency }: { timelineE
                                 <ol className="ml-1 relative border-l border-gray-200 dark:border-gray-700">
                                     {events.map((event) => (
                                         <li key={event.id} className="mb-6 ml-4">
-                                            <div className={`absolute w-3 h-3 ${getSeverityColor(event.severity)} rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900`}></div>
+                                            <div className={`absolute w-3 h-3 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900`} style={{ backgroundColor: getSeverityColor(event.severity) }}></div>
                                             <div className="flex items-center justify-between mb-1">
                                                 <div className="flex items-center">
                                                     {getEventIcon(event.type)}

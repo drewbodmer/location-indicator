@@ -113,7 +113,7 @@ export function EmergencyOverview({ emergency, icon, position, onClose, onNaviga
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center">
                             {icon.info?.severity && (
-                                <div className={`w-3 h-3 rounded-full mr-2 ${getSeverityColor(icon.info.severity)}`}></div>
+                                <div className={`w-3 h-3 rounded-full mr-2`} style={{ backgroundColor: getSeverityColor(icon.info.severity) }}></div>
                             )}
                             <h3 className="font-bold text-lg">{icon.info?.title || 'Incident Details'}</h3>
                         </div>

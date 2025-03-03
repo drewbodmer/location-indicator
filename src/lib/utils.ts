@@ -34,16 +34,8 @@ export const COLOR_SEVERITY_MAP: { [key: string]: [number, number, number] } = {
 };
 
 export const getSeverityColor = (severity?: string) => {
-  switch (severity) {
-    case 'high':
-      return 'bg-red-600';
-    case 'medium':
-      return 'bg-yellow-500';
-    case 'low':
-      return 'bg-green-500';
-    default:
-      return 'bg-gray-500';
-  }
+  const color = COLOR_SEVERITY_MAP[severity || 'high'];
+  return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 };
 
 export async function fetchDirections(startPosition: [number, number], endPosition: [number, number]): Promise<FetchResponse | undefined> {
